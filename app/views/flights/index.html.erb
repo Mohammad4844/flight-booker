@@ -2,13 +2,29 @@
 
 <h1>Flights</h1>
 
-<div id="flights">
-  <% @flights.each do |flight| %>
-    <%= render flight %>
-    <p>
-      <%= link_to "Show this flight", flight %>
-    </p>
-  <% end %>
-</div>
+<%= form_with model: @flight, method: :get do |f| %>
+  <%= f.label :depart_id, "Departure" %>
+  <%= select_tag(:depart_id, options_for_select(@airport_codes), include_blank: true) %>
+  <%= f.label :arrive_id, "Arrival" %>
+  <%= select_tag(:arrive_id_id, options_for_select(@airport_codes), include_blank: true) %>
+  <%= f.label :airline_id, "Airline" %>
+  <%= select_tag(:airline_id, options_for_select(@airline_codes), include_blank: true) %>
+  <%= f.label :start_date, "Date" %>
+  <%= f.date_select :start_date %>
+  <%= f.label :no_of_passengers, "No. of Passengers" %>
+  <%= f.number_field :no_of_passengers, in: 1..4, step: 1, value: 1 %>
+<% end %>
 
-<%= link_to "New flight", new_flight_path %>
+
+<% if @flights.empty? %>
+
+<% else %>
+  <div id="flights">
+    <% @flights.includes(:depart).includes(:arrive).includes(:airline).each do |flight| %>
+      <%= render flight %>
+      <p>
+        <%= link_to "Show this flight", flight %>
+      </p>
+    <% end %>
+  </div>
+<% end %>
