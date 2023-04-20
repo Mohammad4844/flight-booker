@@ -4,6 +4,21 @@
 
 <br>
 
+<%= render @flight %>
+
 <div>
-  <%= link_to "Back to bookings", bookings_path %>
+  <%= form_with model: @booking, method: :post do |f| %>
+    <% @booking.passengers.each do |passenger| %>
+      <div>
+        <%= f.fields_for :passengers, passenger do |p| %>
+          <%= p.label :name, "Name" %>
+          <%= p.text_field :name %>
+          <%= p.label :email, "Email" %>
+          <%= p.email_field :email %>
+        <% end %>
+      </div>
+    <% end %>
+    <%= f.hidden_field :flight_id, value: @flight.id %>
+    <%= f.submit "Submit"%>
+  <% end %>
 </div>

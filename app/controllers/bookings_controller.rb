@@ -1,5 +1,5 @@
 class BookingsController < ApplicationController
-  before_action :set_booking, only: %i[ show edit update destroy ]
+  before_action :set_booking, only: %i[ show ]
 
   # GET /bookings or /bookings.json
   def index
@@ -12,7 +12,11 @@ class BookingsController < ApplicationController
 
   # GET /bookings/new
   def new
+    @flight = Flight.find(params_from_flights[:flight_id])
+
     @booking = Booking.new
+    n = params_from_flights[:no_of_passengers].to_i
+    n.times { @booking.passengers.build }
   end
 
   # GET /bookings/1/edit
@@ -34,28 +38,6 @@ class BookingsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /bookings/1 or /bookings/1.json
-  def update
-    respond_to do |format|
-      if @booking.update(booking_params)
-        format.html { redirect_to booking_url(@booking), notice: "Booking was successfully updated." }
-        format.json { render :show, status: :ok, location: @booking }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @booking.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /bookings/1 or /bookings/1.json
-  def destroy
-    @booking.destroy
-
-    respond_to do |format|
-      format.html { redirect_to bookings_url, notice: "Booking was successfully destroyed." }
-      format.json { head :no_content }
-    end
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -65,6 +47,12 @@ class BookingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def booking_params
-      params.require(:booking).permit(:flight_id)
+      params.require(:booking).permit(:flight_id,
+        passengers_attributes: [:name, :email]
+      )
+    end
+
+    def params_from_flights
+      params.permit(:flight_id, :no_of_passengers)
     end
 end
