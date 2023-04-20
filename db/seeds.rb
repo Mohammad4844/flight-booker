@@ -8,20 +8,61 @@
 Airport.delete_all
 Airline.delete_all
 Flight.delete_all
+Booking.delete_all
+Passenger.delete_all
 
-Airport.create(code: "ORD", name: "Chicago O'Hare International Airport")
-Airport.create(code: "DFW", name: "Dallas/Fort Worth International Airport")
-Airport.create(code: "PHX", name: "Phoenix Sky Harbor International Airport")
+airports = [
+  { code: "ORD", name: "Chicago O'Hare International Airport" },
+  { code: "DFW", name: "Dallas/Fort Worth International Airport" },
+  { code: "PHX", name: "Phoenix Sky Harbor International Airport" }
+]
 
-Airline.create(code: "DL", name: "Delta Airlines")
-Airline.create(code: "AA", name: "American Airlines")
-Airline.create(code: "F9", name: "Frontier Airlines")
+airlines = [
+  { code: "DL", name: "Delta Airlines" },
+  { code: "AA", name: "American Airlines" },
+  { code: "F9", name: "Frontier Airlines" }
+]
 
-a = Airport.where(code: "ORD").first
-b = Airport.where(code: "PHX").first
-c = Airline.where(code: "DL").first
-d = Airline.where(code: "F9").first
+airports.each do |airport| 
+  Airport.create(airport)
+end
 
+airlines.each do |airline|
+  Airline.create(airline)
+end
 
-Flight.create(depart_id: a.id, arrive_id: b.id, airline_id: c.id, start_date_time: "2023-04-19 07:00", duration_min: 120)
-Flight.create(depart_id: a.id, arrive_id: b.id, airline_id: d.id, start_date_time: "2023-04-19 13:00", duration_min: 500)
+ap_1 = Airport.where(code: "ORD").first
+ap_2 = Airport.where(code: "PHX").first
+al_1 = Airline.where(code: "DL").first
+al_2 = Airline.where(code: "F9").first
+
+flights = [
+  { depart_id: ap_1.id, arrive_id: ap_2.id, airline_id: al_1.id, start_date_time: "2023-04-19 07:00", duration_min: 120 },
+  { depart_id: ap_1.id, arrive_id: ap_2.id, airline_id: al_2.id, start_date_time: "2023-04-19 13:00", duration_min: 500 }
+]
+
+flights.each do |flight|
+  Flight.create(flight)
+end
+
+fl_1 = Flight.where(start_date_time: "2023-04-19 07:00").first
+
+bookings = [
+  { flight_id: fl_1.id }
+]
+
+bookings.each do |booking|
+  Booking.create(booking)
+end
+
+bk_1 = Booking.where(flight_id: fl_1.id).first
+
+passengers = [
+  { name: "Sam", email: "sam1234@gmail.com", booking_id: bk_1.id },
+  { name: "Ali", email: "ali_xx@hotmail.com", booking_id: bk_1.id },
+  { name: "Jack", email: "notjack@gmail.com", booking_id: bk_1.id }
+]
+
+passengers.each do |passenger|
+  Passenger.create(passenger)
+end
