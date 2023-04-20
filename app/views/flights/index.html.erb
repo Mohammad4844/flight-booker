@@ -1,20 +1,9 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Flights</h1>
 
-<%= form_with model: @flight, method: :get do |f| %>
-  <%= f.label :depart_id, "Departure" %>
-  <%= f.select(:depart_id, options_for_select(@airport_codes), include_blank: true) %>
-  <%= f.label :arrive_id, "Arrival" %>
-  <%= f.select(:arrive_id, options_for_select(@airport_codes), include_blank: true) %>
-  <%= f.label :airline_id, "Airline" %>
-  <%= f.select(:airline_id, options_for_select(@airline_codes), include_blank: true) %>
-  <%= f.label :start_date, "Date" %>
-  <%= f.date_select :start_date %>
-  <%= f.label :no_of_passengers, "No. of Passengers" %>
-  <%= f.number_field :no_of_passengers, in: 1..4, step: 1, value: 1 %>
-  <%= f.submit "Submit" %>
-<% end %>
+<%= render partial: 'search_form' %>
+
+
 
 
 <% if @flights.empty? %>
