@@ -19,10 +19,6 @@ class BookingsController < ApplicationController
     n.times { @booking.passengers.build }
   end
 
-  # GET /bookings/1/edit
-  def edit
-  end
-
   # POST /bookings or /bookings.json
   def create
     @booking = Booking.new(booking_params)
@@ -43,6 +39,8 @@ class BookingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_booking
       @booking = Booking.find(params[:id])
+      @flight = Flight.find(@booking.flight_id)
+      @passengers = Passenger.where(booking_id: params[:id])
     end
 
     # Only allow a list of trusted parameters through.
