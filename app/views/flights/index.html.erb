@@ -21,11 +21,13 @@
 
 <% else %>
   <div id="flights">
-    <% @flights.includes(:depart).includes(:arrive).includes(:airline).each do |flight| %>
-      <%= render flight %>
-      <p>
-        <%= link_to "Show this flight", flight %>
-      </p>
+    <%= form_with url: '/bookings/new', method: :get do |f| %>
+      <% @flights.includes(:depart).includes(:arrive).includes(:airline).each do |flight| %>
+        <%= render flight %>
+         <%= f.radio_button :flight_id, flight.id %>
+      <% end %>
+      <%= f.hidden_field :no_of_passengers, value: @no_of_passengers %>
+      <%= f.submit "Submit"%>
     <% end %>
   </div>
 <% end %>
