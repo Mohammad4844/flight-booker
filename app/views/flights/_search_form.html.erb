@@ -12,8 +12,9 @@
     </div>
     <div class="mb-3">
       <%= f.label :start_date, "Date", class: "form-label mt-0" %>
-      <%= f.date_select(:start_date, {}, { class: "form-select w-auto d-inline-block m-2 mt-0" }) %>
+      <%= f.date_select(:start_date, {:include_blank => true, :default => nil}, { class: "form-select w-auto d-inline-block m-2 mt-0" }) %>
       <%= f.submit "Search", class: "btn btn-outline-success m-2 mt-0"%>
+      <div class="text-info mb-3"><em> *If you choose a date, it needs to be fully specified (yr, month, date)</em></div>
     </div>
   <% end %>
 </div>

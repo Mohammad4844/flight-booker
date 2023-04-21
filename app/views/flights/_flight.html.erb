@@ -28,7 +28,9 @@
     <br>
     <span class="m-1">
       <strong><span>Duration:</span></strong>
-      <%= (flight.duration_min / 60).to_i %> hr
+      <% if flight.duration_min / 60 != 0 %>
+        <%= "#{flight.duration_min / 60} hr" %>
+      <% end %>
       <% if flight.duration_min % 60 != 0 %>
         <%= "#{flight.duration_min % 60} min" %>
       <% end %>

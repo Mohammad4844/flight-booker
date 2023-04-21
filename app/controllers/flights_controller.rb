@@ -9,9 +9,19 @@ class FlightsController < ApplicationController
       return render
     end
 
-    date = Date.parse(flight_params[:start_date_time])
+    beginning = ''
+    ending = ''
+    if flight_params[:start_date_time] == "--"
+      beginning = Date.today.beginning_of_day
+      ending = (Date.today + 7).end_of_day
+    else
+      date = Date.parse(flight_params[:start_date_time])
+      beginning = date.beginning_of_day
+      ending = date.end_of_day
+    end
+    
     @flights = Flight.where(flight_params.except(:start_date_time, :no_of_passengers).reject { |k, v| v.blank? })
-      .where(start_date_time: (date.beginning_of_day)..(date.end_of_day))
+      .where(start_date_time: (beginning)..(ending))
 
     @no_of_passengers = flight_params[:no_of_passengers]
   end
