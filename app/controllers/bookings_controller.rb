@@ -22,6 +22,8 @@ class BookingsController < ApplicationController
 
   # POST /bookings or /bookings.json
   def create
+
+    @flight = Flight.find(booking_params[:flight_id])
     @booking = Booking.new(booking_params)
 
     respond_to do |format|

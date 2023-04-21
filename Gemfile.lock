@@ -92,6 +92,8 @@ GEM
       activesupport (>= 5.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
+    immigrant (0.3.6)
+      activerecord (>= 3.0)
     importmap-rails (1.1.5)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
@@ -212,6 +214,7 @@ DEPENDENCIES
   bootsnap
   capybara
   debug
+  immigrant
   importmap-rails
   jbuilder
   puma (~> 5.0)
