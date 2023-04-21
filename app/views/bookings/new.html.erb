@@ -1,10 +1,10 @@
 <div class="d-flex flex-column justify-content-center align-items-center">
-  
-  <br>
+  <div class="display-6 mb-3 m-4 text-secondary" style="text-align: left; text-decoration: underline"><em>Enter Passenger Information</em></div>
+  <div class="display-6 mb-3" style="text-align: left">Flight</div>
   <div class="input-group mb-3" style="width: 900px">
     <%= render @flight %>
   </div>
-  
+  <div class="display-6 mb-3" style="text-align: left">Passengers</div>
   <div>
     <%= form_with model: @booking, method: :post, class: "d-flex flex-column justify-content-center align-items-center" do |f| %>
       <% @booking.passengers.each do |passenger| %>
@@ -20,7 +20,7 @@
         </div>
       <% end %>
       <%= f.hidden_field :flight_id, value: @flight.id %>
-      <%= f.submit "Book Flight", class: "btn btn-outline-success m-2 mt-0"%>
+      <%= f.submit "Book", class: "btn btn-outline-success m-2 mt-0"%>
     <% end %>
   </div>
 </div>

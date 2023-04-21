@@ -1,4 +1,32 @@
-<p style="color: green"><%= notice %></p>
 
-<%= render @flight %>
-<%= render @passengers %>
+
+<div class="d-flex flex-column justify-content-center align-items-center">
+  <p style="color: green"><%= notice %></p>
+  <div class="display-6 mb-3 m-3 text-secondary" style="text-align: left; text-decoration: underline"><em>Flight Booked!</em></div>
+
+  <div class="display-6 mb-3" style="text-align: left">Link</div>
+  <div>Use the following url to refer to this booking later: <a href="<%= @url %>"><%= @url %></a></div>
+  
+  <br>
+  <div class="display-6 mb-3" style="text-align: left">Flight</div>
+  <div class="input-group mb-3" style="width: 900px">
+    <%= render @flight %>
+  </div>
+
+  <div class="display-6 mb-3" style="text-align: left">Passengers</div>
+  <div>
+  
+    <% @passengers.each do |passenger| %>
+        <div>
+          <%= fields_for :passengers, passenger do |p| %>
+            <div class="input-group mb-3">
+              <%= p.text_field :name, class: "form-control w-45", readonly: true, style: "pointer-events: none;" %>
+              <%= p.email_field :email, class: "form-control w-45", readonly: true, style: "pointer-events: none;" %>
+            </div>
+  
+          <% end %>
+        </div>
+    <% end %>
+  </div>
+
+</div>

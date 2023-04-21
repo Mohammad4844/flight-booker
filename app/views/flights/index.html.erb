@@ -1,28 +1,30 @@
-<p style="color: green"><%= notice %></p>
+<div class="d-flex flex-column justify-content-center align-items-center">
 
+  <div style="color: green"><%= notice %></div>
 
-<%= render partial: 'search_form' %>
+  <div class="display-6 mb-3 m-4 text-secondary" style="text-align: left; text-decoration: underline"><em>Choose Your Flight</em></div>
+  
+  <%= render partial: 'search_form' %>
 
-<% if @flights.empty? %>
+  <% if @flights.any? %>
+  <div class="display-6 mb-3" style="text-align: left">Flights</div>
+    <div id="flights" class="text-center">
+      <%= form_with url: '/bookings/new', method: :get, class: "d-flex flex-column justify-content-center align-items-center" do |f| %>
 
-
-
-<% else %>
-  <div id="flights" class="text-center">
-    <%= form_with url: '/bookings/new', method: :get, class: "d-flex flex-column justify-content-center align-items-center" do |f| %>
-
-        <% @flights.includes(:depart).includes(:arrive).includes(:airline).each do |flight| %>
-          <div class="input-group" style="width: 900px">
-            <%= render flight %>
-            <div class="input-group-text">
-              <%= f.radio_button :flight_id, flight.id, class: "form-check-input mt-0"%>
+          <% @flights.includes(:depart).includes(:arrive).includes(:airline).each do |flight| %>
+            <div class="input-group" style="width: 900px">
+              <%= render flight %>
+              <div class="input-group-text">
+                <%= f.radio_button :flight_id, flight.id, class: "form-check-input mt-0"%>
+              </div>
             </div>
-          </div>
-          <br>
-        <% end %>
+            <br>
+          <% end %>
 
-      <%= f.hidden_field :no_of_passengers, value: @no_of_passengers %>
-      <%= f.submit "Select", class: "btn btn-outline-success m-2 mt-0" %>
-    <% end %>
-  </div>
-<% end %>
+        <%= f.hidden_field :no_of_passengers, value: @no_of_passengers %>
+        <%= f.submit "Select", class: "btn btn-outline-success m-2 mt-0" %>
+      <% end %>
+    </div>
+  <% end %>
+
+</div>
