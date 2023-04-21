@@ -1,24 +1,20 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Setup 
+This assumes you have Ruby installed already (recommended version: 3.1.2). This app might not work with older versions than the reccomended one.
+<br>
+### Install Rails
+`gem install rails`
+### Check to see if Rails installed properly
+`rails -v`
+### Clone this repository
+`git clone https://github.com/Mohammad4844/flight-booker.git`
+### Install dependencies
+Cd into the repo and then enter:
+`bundle install`
+### Migrate the Database schema
+`rails db:migrate`
+### Seed the database with some sample data
+`rails db:seed`
+### Run the server on port 3000
+`rails s`
