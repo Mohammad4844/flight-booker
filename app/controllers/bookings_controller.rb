@@ -8,6 +8,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings/1 or /bookings/1.json
   def show
+    @url = request.url
   end
 
   # GET /bookings/new

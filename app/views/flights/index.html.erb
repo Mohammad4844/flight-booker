@@ -1,33 +1,30 @@
-<p style="color: green"><%= notice %></p>
+<div class="d-flex flex-column justify-content-center align-items-center">
 
-<h1>Flights</h1>
+  <div style="color: green"><%= notice %></div>
 
-<%= form_with model: @flight, method: :get do |f| %>
-  <%= f.label :depart_id, "Departure" %>
-  <%= f.select(:depart_id, options_for_select(@airport_codes), include_blank: true) %>
-  <%= f.label :arrive_id, "Arrival" %>
-  <%= f.select(:arrive_id, options_for_select(@airport_codes), include_blank: true) %>
-  <%= f.label :airline_id, "Airline" %>
-  <%= f.select(:airline_id, options_for_select(@airline_codes), include_blank: true) %>
-  <%= f.label :start_date, "Date" %>
-  <%= f.date_select :start_date %>
-  <%= f.label :no_of_passengers, "No. of Passengers" %>
-  <%= f.number_field :no_of_passengers, in: 1..4, step: 1, value: 1 %>
-  <%= f.submit "Submit" %>
-<% end %>
+  <div class="display-6 mb-3 m-4 text-secondary" style="text-align: left; text-decoration: underline"><em>Choose Your Flight</em></div>
+  
+  <%= render partial: 'search_form' %>
 
+  <% if @flights.any? %>
+  <div class="display-6 mb-3" style="text-align: left">Flights</div>
+    <div id="flights" class="text-center">
+      <%= form_with url: '/bookings/new', method: :get, class: "d-flex flex-column justify-content-center align-items-center" do |f| %>
 
-<% if @flights.empty? %>
+          <% @flights.includes(:depart).includes(:arrive).includes(:airline).each do |flight| %>
+            <div class="input-group" style="width: 900px">
+              <%= render flight %>
+              <div class="input-group-text">
+                <%= f.radio_button :flight_id, flight.id, class: "form-check-input mt-0"%>
+              </div>
+            </div>
+            <br>
+          <% end %>
 
-<% else %>
-  <div id="flights">
-    <%= form_with url: '/bookings/new', method: :get do |f| %>
-      <% @flights.includes(:depart).includes(:arrive).includes(:airline).each do |flight| %>
-        <%= render flight %>
-         <%= f.radio_button :flight_id, flight.id %>
+        <%= f.hidden_field :no_of_passengers, value: @no_of_passengers %>
+        <%= f.submit "Select", class: "btn btn-outline-success m-2 mt-0" %>
       <% end %>
-      <%= f.hidden_field :no_of_passengers, value: @no_of_passengers %>
-      <%= f.submit "Submit"%>
-    <% end %>
-  </div>
-<% end %>
+    </div>
+  <% end %>
+
+</div>

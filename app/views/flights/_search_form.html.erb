@@ -1,0 +1,19 @@
+<div class="container-fluid text-center">
+  <%= form_with model: @flight, method: :get do |f| %>
+    <div class="mb-3">
+      <%= f.label :depart_id, "Departure", class: "form-label" %>
+      <%= f.select(:depart_id, options_for_select(@airport_codes), { include_blank: true }, { class: "form-select w-auto d-inline-block m-2 mb-0" }) %>
+      <%= f.label :arrive_id, "Arrival", class: "form-label" %>
+      <%= f.select(:arrive_id, options_for_select(@airport_codes), { include_blank: true }, { class: "form-select w-auto d-inline-block m-2 mb-0" }) %>
+      <%= f.label :airline_id, "Airline", class: "form-label" %>
+      <%= f.select(:airline_id, options_for_select(@airline_codes), { include_blank: true }, { class: "form-select w-auto d-inline-block m-2 mb-0" }) %>
+      <%= f.label :no_of_passengers, "No. of Passengers", class: "form-label" %>
+      <%= f.number_field :no_of_passengers, in: 1..4, step: 1, value: 1, class: "form-control w-auto d-inline-block m-2 mb-0" %>
+    </div>
+    <div class="mb-3">
+      <%= f.label :start_date, "Date", class: "form-label mt-0" %>
+      <%= f.date_select(:start_date, {}, { class: "form-select w-auto d-inline-block m-2 mt-0" }) %>
+      <%= f.submit "Search", class: "btn btn-outline-success m-2 mt-0"%>
+    </div>
+  <% end %>
+</div>
