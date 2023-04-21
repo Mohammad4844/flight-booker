@@ -12,15 +12,22 @@ Airport.delete_all
 Airline.delete_all
 
 airports = [
-  { code: "ORD", name: "Chicago O'Hare International Airport" },
+  { code: "CLT", name: "Charlotte Douglas International Airport" },
+  { code: "DEN", name: "Denver International Airport" },
   { code: "DFW", name: "Dallas/Fort Worth International Airport" },
-  { code: "PHX", name: "Phoenix Sky Harbor International Airport" }
+  { code: "JFK", name: "John F. Kennedy International Airport" },  
+  { code: "MIA", name: "Miami International Airport" },
+  { code: "ORD", name: "Chicago O'Hare International Airport" },
+  { code: "PHX", name: "Phoenix Sky Harbor International Airport" },  
 ]
 
 airlines = [
-  { code: "DL", name: "Delta Airlines" },
   { code: "AA", name: "American Airlines" },
-  { code: "F9", name: "Frontier Airlines" }
+  { code: "AS", name: "Alaska Airlines" },
+  { code: "DL", name: "Delta Airlines" },
+  { code: "FL", name: "Air Tran" },
+  { code: "UA", name: "United Airlines" },
+  { code: "WN", name: "Southwest Airlines" },
 ]
 
 airports.each do |airport| 
@@ -31,38 +38,22 @@ airlines.each do |airline|
   Airline.create(airline)
 end
 
-ap_1 = Airport.where(code: "ORD").first
-ap_2 = Airport.where(code: "PHX").first
-al_1 = Airline.where(code: "DL").first
-al_2 = Airline.where(code: "F9").first
+today = Date.today
 
-flights = [
-  { depart_id: ap_1.id, arrive_id: ap_2.id, airline_id: al_1.id, start_date_time: "2023-04-19 07:00", duration_min: 120 },
-  { depart_id: ap_1.id, arrive_id: ap_2.id, airline_id: al_2.id, start_date_time: "2023-04-19 13:00", duration_min: 500 }
-]
+(0..6).each do |i|
+  date = today + i
+  rand(2..5).times do |j|
+    hour = rand(0..23)
+    minute = rand(0..11) * 5
+    second = 0
+    datetime = DateTime.new(date.year, date.month, date.day, hour, minute, second)
 
-flights.each do |flight|
-  Flight.create(flight)
-end
-
-fl_1 = Flight.where(start_date_time: "2023-04-19 07:00").first
-
-bookings = [
-  { flight_id: fl_1.id }
-]
-
-bookings.each do |booking|
-  Booking.create(booking)
-end
-
-bk_1 = Booking.where(flight_id: fl_1.id).first
-
-passengers = [
-  { name: "Sam", email: "sam1234@gmail.com", booking_id: bk_1.id },
-  { name: "Ali", email: "ali_xx@hotmail.com", booking_id: bk_1.id },
-  { name: "Jack", email: "notjack@gmail.com", booking_id: bk_1.id }
-]
-
-passengers.each do |passenger|
-  Passenger.create(passenger)
+    duration = rand(10..60) * 5
+  
+    airport_ids = Airport.pluck(:id).sample(2)
+    airline_id = Airline.pluck(:id).sample(1).first
+    
+    Flight.create({ depart_id: airport_ids[0], arrive_id: airport_ids[1], airline_id: airline_id,
+       start_date_time: datetime, duration_min: duration })
+  end
 end
