@@ -1,27 +1,38 @@
-<div id="<%= dom_id flight %>">
-  <p>
-    <strong>Depart:</strong>
-    <%= flight.depart.code %>
-  </p>
+<span id="<%= dom_id flight %>" class="form-control d-flex flex-row w-auto gap-7">
+  <span style="flex: 1; text-align: left" class="m-2">
+    <span class="m-1">
+      <strong><span>Depart:</span></strong>
+      <em><%= flight.depart.code %> </em>- <%= flight.depart.name %>
+    </span>
+    <br>
+    <span class="m-1">
+      <strong><span>Arrive:</span></strong>
+      <em><%= flight.arrive.code %></em> - <%= flight.arrive.name %>
+    </span>
+    <br>
+    <span class="m-1">
+      <strong><span>Airline:</span></strong>
+      <em><%= flight.airline.code %></em> - <%= flight.airline.name %>
+    </span>
+  </span>
+  <span style="flex: 1; text-align: left" class="m-2">
+    <span class="m-1">
+      <strong><span>Date:</span></strong>
+      <%= flight.start_date_time.strftime("%A, %B %d, %Y") %>
+    </span>
+    <br>
+    <span class="m-1">
+      <strong><span>Time:</span></strong>
+      <%= flight.start_date_time.strftime("%H:%M UTC") %>
+    </span>
+    <br>
+    <span class="m-1">
+      <strong><span>Duration:</span></strong>
+      <%= (flight.duration_min / 60).to_i %> hr
+      <% if flight.duration_min % 60 != 0 %>
+        <%= "#{flight.duration_min % 60} min" %>
+      <% end %>
+    </span>
+  </span>
 
-  <p>
-    <strong>Arrive:</strong>
-    <%= flight.arrive.code %>
-  </p>
-
-  <p>
-    <strong>Airline:</strong>
-    <%= flight.airline.code %>
-  </p>
-
-  <p>
-    <strong>Start date time:</strong>
-    <%= flight.start_date_time %>
-  </p>
-
-  <p>
-    <strong>Duration min:</strong>
-    <%= flight.duration_min %>
-  </p>
-
-</div>
+</span>

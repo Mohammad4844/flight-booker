@@ -3,20 +3,26 @@
 
 <%= render partial: 'search_form' %>
 
-
-
-
 <% if @flights.empty? %>
 
+
+
 <% else %>
-  <div id="flights">
-    <%= form_with url: '/bookings/new', method: :get do |f| %>
-      <% @flights.includes(:depart).includes(:arrive).includes(:airline).each do |flight| %>
-        <%= render flight %>
-         <%= f.radio_button :flight_id, flight.id %>
-      <% end %>
+  <div id="flights" class="text-center">
+    <%= form_with url: '/bookings/new', method: :get, class: "d-flex flex-column justify-content-center align-items-center" do |f| %>
+
+        <% @flights.includes(:depart).includes(:arrive).includes(:airline).each do |flight| %>
+          <div class="input-group" style="width: 900px">
+            <%= render flight %>
+            <div class="input-group-text">
+              <%= f.radio_button :flight_id, flight.id, class: "form-check-input mt-0"%>
+            </div>
+          </div>
+          <br>
+        <% end %>
+
       <%= f.hidden_field :no_of_passengers, value: @no_of_passengers %>
-      <%= f.submit "Submit"%>
+      <%= f.submit "Select", class: "btn btn-outline-success m-2 mt-0" %>
     <% end %>
   </div>
 <% end %>
