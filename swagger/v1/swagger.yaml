@@ -1,0 +1,181 @@
+---
+openapi: 3.1.0
+info:
+  title: Flight Booker API
+  version: v1
+  description: This is the first version of the Flight Booker API
+servers:
+  - url: https://flight-booker.example.com/api/v1
+    description: Production
+paths:
+  "/flights":
+    get:
+      summary: Search flights
+      tags:
+        - Flights
+      description: >
+        Returns the flights matching a route on a given day. See Search behavior
+        for how the date window and the optional filters are applied.
+      parameters:
+        - in: query
+          name: depart
+          required: true
+          schema:
+            type: string
+          description: IATA code of the departure airport, e.g. "JFK".
+        - in: query
+          name: arrive
+          required: true
+          schema:
+            type: string
+          description: IATA code of the arrival airport, e.g. "ORD".
+        - in: query
+          name: date
+          required: false
+          schema:
+            type: string
+            format: date
+          description: >
+            Day to search, as YYYY-MM-DD. Omit to search the next seven days.
+        - in: query
+          name: passengers
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 4
+          description: Number of seats to book together. Defaults to 1; at most 4.
+        - in: query
+          name: airline
+          required: false
+          schema:
+            type: string
+          description: >
+            IATA code of a single airline, e.g. "AA". Omit to search every airline.
+      responses:
+        '200':
+          description: successfully returns the matching flights.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Flight'
+              examples:
+                matches:
+                  summary: Two flights on the route
+                  value:
+                    data:
+                      - id: 41
+                        start_date_time: '2026-10-01T08:30:00Z'
+                        duration_min: 155
+                        airline:
+                          code: AA
+                          name: American Airlines
+                        depart:
+                          code: JFK
+                          name: John F. Kennedy International Airport
+                        arrive:
+                          code: ORD
+                          name: Chicago O'Hare International Airport
+                      - id: 58
+                        start_date_time: '2026-10-01T16:05:00Z'
+                        duration_min: 148
+                        airline:
+                          code: UA
+                          name: United Airlines
+                        depart:
+                          code: JFK
+                          name: John F. Kennedy International Airport
+                        arrive:
+                          code: ORD
+                          name: Chicago O'Hare International Airport
+                noMatches:
+                  summary: No flights on that day
+                  value:
+                    data: []
+        '400':
+          description: a query parameter is missing or malformed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              examples:
+                missingRoute:
+                  value:
+                    errors:
+                      - depart and arrive are both required
+                unknownAirport:
+                  value:
+                    errors:
+                      - depart XYZ is not a known airport code
+                tooManyPassengers:
+                  value:
+                    errors:
+                      - passengers must be between 1 and 4
+components:
+  schemas:
+    Flight:
+      type: object
+      title: Flight
+      description: >
+        One scheduled flight. Airports and the airline are nested rather than given as
+        bare ids, so a client can render the result without a second call.
+      properties:
+        id:
+          type: integer
+        start_date_time:
+          type: string
+          format: date-time
+          description: Local departure time (ISO 8601).
+        duration_min:
+          type: integer
+          description: Scheduled flight time in minutes.
+        airline:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Two-letter IATA code, e.g. "AA"
+            name:
+              type: string
+              description: Airline name, e.g. "American Airlines"
+        depart:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Three-letter IATA code, e.g. "JFK"
+            name:
+              type: string
+        arrive:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Three-letter IATA code, e.g. "ORD"
+            name:
+              type: string
+tags:
+- name: Flights
+  description: |
+    Search the flight schedule.
+
+    ### Search behavior
+
+    `depart` and `arrive` select the route; everything else narrows the result.
+
+    | Parameter | Required | Default | Notes |
+    | --- | --- | --- | --- |
+    | `depart` / `arrive` | Yes | — | IATA airport codes |
+    | `date` | No | The next 7 days | Narrows to a single day when given |
+    | `passengers` | No | `1` | 1–4, booked as one party |
+    | `airline` | No | Every airline | IATA airline code |
