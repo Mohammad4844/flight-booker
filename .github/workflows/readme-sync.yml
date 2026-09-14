@@ -1,0 +1,43 @@
+name: Sync API docs to ReadMe
+
+on:
+  # On a PR: validate the spec and show what would be uploaded, without uploading.
+  pull_request:
+    paths:
+      - 'swagger/**'
+      - '.github/workflows/readme-sync.yml'
+  # On main: do the real upload.
+  push:
+    branches: [main]
+    paths:
+      - 'swagger/**'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # No key needed: purely local schema check.
+      - name: Validate the spec
+        run: npx rdme@10 openapi validate swagger/v1/swagger.yaml
+
+      # No --slug: ReadMe infers it from the filename. Once you know the slug it assigned,
+      # add --slug=<slug> to both steps below so re-uploads always hit the same definition.
+      - name: Upload to ReadMe (dry run)
+        if: github.event_name == 'pull_request'
+        run: >
+          npx rdme@10 openapi upload swagger/v1/swagger.yaml
+          --key=${{ secrets.README_API_KEY }}
+          --dry-run
+
+      - name: Upload to ReadMe
+        if: github.event_name == 'push'
+        run: >
+          npx rdme@10 openapi upload swagger/v1/swagger.yaml
+          --key=${{ secrets.README_API_KEY }}
+          --confirm-overwrite
